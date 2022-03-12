@@ -13,9 +13,9 @@ def inicializar(mGrafo, tipoEntrada):
         nomeArquivo = nomeArquivo.replace("json","txt")
     else:
         # nomeArquivo = input("Digite o nome do arquivo txt: ")
-        nomeArquivo = "grafo_bl.txt"
+        nomeArquivo = "grafo.txt"
   
-    arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
+    arquivo = open(f'Grafos-TPII\\tp1\\src\\{nomeArquivo}', 'r')
 
     n = int(arquivo.readline())
     

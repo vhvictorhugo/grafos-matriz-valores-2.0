@@ -2,6 +2,7 @@
 import json
 from tkinter import N
 import sys
+from copy import deepcopy
 
 class Elemento(object):
     def __init__(self):
@@ -70,20 +71,28 @@ class Grafo(object):
             if vizinho not in marcados:
                 self.busca(vizinho, marcados)
 
-    # Verifica se um vertice é articulação
+   
+
     def articulacao(self, vertice):
-        if vertice not in self.matriz:
-            return False
-        for vizinho in self.retornaVizinhos(vertice):
-            comVertice = []
-            semVertice = []
-            self.busca(vizinho, comVertice)
-            self.busca(vizinho, semVertice, vertice)
-            comVertice.sort()
-            semVertice.sort()
-            if (comVertice != semVertice):  # compara se ouve alguma mudança nos vertices marcados
-                return True
-        return False
+        for v in range(len(self.matriz)):
+            c1 = self.componentesConexas(self.ordem())
+        
+
+        mat = deepcopy(self.matriz)
+
+        self.matriz.pop(vertice - 1)
+        for i in range(len( self.matriz)):
+            self.matriz[i].pop(vertice-1)
+
+        for v in range(len(self.matriz)):
+            c2 = self.componentesConexas(self.ordem())
+
+        print(mat)
+        self.matriz = deepcopy(mat)
+        print(self.matriz)
+        return not (c2[0] == c1[0])
+
+         
 
     def buscaEmLargura(self, vertice):
         fila = []
@@ -273,7 +282,7 @@ class Grafo(object):
 
         copia = [[] * len(self.matriz) for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
-            copia[i] = self.matriz[i].copy()
+            copia[i] = deepcopy(self.matriz[i])
         #determinar uma cadeia euliriana fechada com o algoritmo de Fleury
         self.cadeiaEuliriana()
         
@@ -284,7 +293,7 @@ class Grafo(object):
 
         matriz = [[] * len(self.matriz) for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
-            matriz[i] = self.matriz[i].copy()
+            matriz[i] = deepcopy(self.matriz[i])
         
         while True:
             vertice = cadeia[len(cadeia) -1] #vertice a ser explorado é o ultimo na cadeia
@@ -341,7 +350,7 @@ class Grafo(object):
 
         matriz = [[] * len(self.matriz) for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
-            matriz[i] = self.matriz[i].copy()
+            matriz[i] = deepcopy(self.matriz[i])
 
         for i in range (len(matriz)):
             for x in range (len(matriz)): 
