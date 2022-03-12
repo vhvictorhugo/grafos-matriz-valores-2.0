@@ -74,6 +74,9 @@ class Grafo(object):
    
 
     def articulacao(self, vertice):
+
+        if (vertice -1 < 0 or vertice > len(self.matriz)):
+            return False
         for v in range(len(self.matriz)):
             c1 = self.componentesConexas(self.ordem())
         
@@ -86,10 +89,8 @@ class Grafo(object):
 
         for v in range(len(self.matriz)):
             c2 = self.componentesConexas(self.ordem())
-
-        print(mat)
         self.matriz = deepcopy(mat)
-        print(self.matriz)
+      
         return not (c2[0] == c1[0])
 
          
