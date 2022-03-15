@@ -106,7 +106,7 @@ def menuFuncoes():
             mGrafo.verificarEuliriano()       
 
         elif escolha == 13:
-            print("Conjunto de independencia:", mGrafo.heuristicaGulosa()[1])
+            print("Conjunto de independencia: ", mGrafo.heuristicaGulosa()[1])
             
         else:
             break
