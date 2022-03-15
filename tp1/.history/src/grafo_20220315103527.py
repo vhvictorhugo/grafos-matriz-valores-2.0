@@ -449,43 +449,20 @@ class Grafo(object):
 
         return parent
         
-    def listarVertices(self):
-        vertices = []
-        for i in range(len(self.matriz)):
-            vertices.append(i+1)
-        return vertices
-        
     # heuristica gulosa para determinar um conjunto independente ou estável
     def heuristicaGulosa(self):
         S = []
-        numeroIndependência = 0
         vertices = []
-        verticesEGraus = [] # lista auxiliar para salvar os vertices e seus respectivos graus
-        
-        # recuperando os vértices e seus respectivos graus
-        for v in self.listarVertices().copy():
-            verticesEGraus.append([v, self.grauVertice(v)])
+        numeroIndependência = 0
 
-        # ordenando os vértices em ordem decrescente de graus
-        verticesEGraus = sorted(verticesEGraus, key=itemgetter(1), reverse=True)
+        # recuperando lista de vértices
+        for i in range(len(self.matriz)):
+            vertices = i
+
+        print(vertices)
+        input("pause")
             
-        for v in verticesEGraus:
-            vertices.append(v[0])
-        
-        while (len(vertices) > 0):
-            # recupera vertice de maior grau
-            maiorGrau = vertices[0]
-            # remove vertice de maior grau
-            vertices.pop(0)
-            # remove vizinhos do vertice de maior grau
-            for vizinho in self.retornaVizinhos(maiorGrau):
-                if(vizinho not in vertices):
-                    break
-                indiceVizinho = vertices.index(vizinho)
-                vertices.pop(indiceVizinho)
+        # ordenando os vértices em ordem decrescente de graus
+        vertices = sorted(vertices, key=itemgetter(0), reverse=True)
 
-            S.append(maiorGrau)
-
-            numeroIndependência += 1
-
-        return numeroIndependência, S
+        print(vertices)
