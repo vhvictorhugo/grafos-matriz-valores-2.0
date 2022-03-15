@@ -2,7 +2,6 @@
 import json
 from tkinter import N
 import sys
-from copy import deepcopy
 from operator import itemgetter, attrgetter
 
 class Elemento(object):
@@ -72,29 +71,20 @@ class Grafo(object):
             if vizinho not in marcados:
                 self.busca(vizinho, marcados)
 
-   
-
+    # Verifica se um vertice é articulação
     def articulacao(self, vertice):
-
-        if (vertice -1 < 0 or vertice > len(self.matriz)):
+        if vertice not in self.matriz:
             return False
-        for v in range(len(self.matriz)):
-            c1 = self.componentesConexas(self.ordem())
-        
-
-        mat = deepcopy(self.matriz)
-
-        self.matriz.pop(vertice - 1)
-        for i in range(len( self.matriz)):
-            self.matriz[i].pop(vertice-1)
-
-        for v in range(len(self.matriz)):
-            c2 = self.componentesConexas(self.ordem())
-        self.matriz = deepcopy(mat)
-      
-        return not (c2[0] == c1[0])
-
-         
+        for vizinho in self.retornaVizinhos(vertice):
+            comVertice = []
+            semVertice = []
+            self.busca(vizinho, comVertice)
+            self.busca(vizinho, semVertice, vertice)
+            comVertice.sort()
+            semVertice.sort()
+            if (comVertice != semVertice):  # compara se ouve alguma mudança nos vertices marcados
+                return True
+        return False
 
     def buscaEmLargura(self, vertice):
         fila = []
@@ -284,7 +274,7 @@ class Grafo(object):
 
         copia = [[] * len(self.matriz) for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
-            copia[i] = deepcopy(self.matriz[i])
+            copia[i] = self.matriz[i].copy()
         #determinar uma cadeia euliriana fechada com o algoritmo de Fleury
         self.cadeiaEuliriana()
         
@@ -295,7 +285,7 @@ class Grafo(object):
 
         matriz = [[] * len(self.matriz) for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
-            matriz[i] = deepcopy(self.matriz[i])
+            matriz[i] = self.matriz[i].copy()
         
         while True:
             vertice = cadeia[len(cadeia) -1] #vertice a ser explorado é o ultimo na cadeia
@@ -352,7 +342,7 @@ class Grafo(object):
 
         matriz = [[] * len(self.matriz) for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
-            matriz[i] = deepcopy(self.matriz[i])
+            matriz[i] = self.matriz[i].copy()
 
         for i in range (len(matriz)):
             for x in range (len(matriz)): 
@@ -459,43 +449,17 @@ class Grafo(object):
 
         return parent
         
-    def listarVertices(self):
-        vertices = []
-        for i in range(len(self.matriz)):
-            vertices.append(i+1)
-        return vertices
-        
     # heuristica gulosa para determinar um conjunto independente ou estável
     def heuristicaGulosa(self):
         S = []
-        numeroIndependência = 0
         vertices = []
-        verticesEGraus = [] # lista auxiliar para salvar os vertices e seus respectivos graus
-        
-        # recuperando os vértices e seus respectivos graus
-        for v in self.listarVertices().copy():
-            verticesEGraus.append([v, self.grauVertice(v)])
+        numeroIndependência = 0
 
-        # ordenando os vértices em ordem decrescente de graus
-        verticesEGraus = sorted(verticesEGraus, key=itemgetter(1), reverse=True)
+        # recuperando lista de vértices
+        for i in range(len(self.matriz)):
+            vertices = i
             
-        for v in verticesEGraus:
-            vertices.append(v[0])
-        
-        while (len(vertices) > 0):
-            # recupera vertice de maior grau
-            maiorGrau = vertices[0]
-            # remove vertice de maior grau
-            vertices.pop(0)
-            # remove vizinhos do vertice de maior grau
-            for vizinho in self.retornaVizinhos(maiorGrau):
-                if(vizinho not in vertices):
-                    break
-                indiceVizinho = vertices.index(vizinho)
-                vertices.pop(indiceVizinho)
+        # ordenando os vértices em ordem decrescente de graus
+        vertices = sorted(vertices, key=itemgetter(1), reverse=True)
 
-            S.append(maiorGrau)
-
-            numeroIndependência += 1
-
-        return numeroIndependência, S
+        print(vertices)

@@ -13,7 +13,8 @@ def inicializar(mGrafo, tipoEntrada):
         mGrafo.lerJson(nomeArquivo)
         nomeArquivo = nomeArquivo.replace("json","txt")
     else:
-        nomeArquivo = input("Digite o nome do arquivo txt: ")
+        # nomeArquivo = input("Digite o nome do arquivo txt: ")
+        nomeArquivo = "grafo.txt"
 
     arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
 
@@ -106,7 +107,7 @@ def menuFuncoes():
             mGrafo.verificarEuliriano()       
 
         elif escolha == 13:
-            print("Conjunto de independencia:", mGrafo.heuristicaGulosa()[1])
+            mGrafo.heuristicaGulosa()  
             
         else:
             break
