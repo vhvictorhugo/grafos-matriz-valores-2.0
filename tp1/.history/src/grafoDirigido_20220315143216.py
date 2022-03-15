@@ -25,7 +25,7 @@ class Grafo(object):
     def retornaVizinhos(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
         vizinhos = []
         for i in range(len(self.matriz)):
-            if self.matriz[vertice - 1][i][0] != 0:
+            if self.matriz[vertice - 1][i] != 0:
                 vizinhos.append(i + 1)
         return vizinhos
 
@@ -71,33 +71,49 @@ class Grafo(object):
 
 
     # Fonte: https://pt.stackoverflow.com/questions/227717/como-utilizar-o-algoritmo-de-verifica%C3%A7%C3%A3o-de-ciclo-em-grafos
+    # def verificar_ciclos(self, nodo_inicial):
+    #     nodos_visitados = set()
+    #     nodos_restantes = [nodo_inicial]
+
+    #     while nodos_restantes:
+    #         nodo_atual = nodos_restantes.pop()
+    #         nodos_visitados.add(nodo_atual)
+
+    #         for vizinho in self.vizinhos(nodo_atual):
+    #             if vizinho in nodos_visitados:
+    #                 return True
+
+    #             nodos_restantes.append(vizinho)
+
+    #     return False
 
     def verificaCiclos(self, nodo_inicial):
-        nodos_visitados = []
+        nodos_visitados = set()
         nodos_restantes = [nodo_inicial]
 
         while nodos_restantes:
             nodo_atual = nodos_restantes.pop()
-            nodos_visitados.append(nodo_atual)
+            nodos_visitados.add(nodo_atual)
 
-            for vizinho in self.retornaVizinhos(nodo_atual):
-                if vizinho in nodos_visitados:
-                    return True
-
-                nodos_restantes.append(vizinho)
-        
-        return False
+            for vizinho in self.
 
 
 grafo = Grafo()
-
 nomeArquivo = "grafo.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
-n = int(arquivo.readline())
+
+n = int(arquivo.readline())   
+
 grafo.inicializaMatriz(n)
+
 for linha in arquivo:
     linha = linha.split(' ')
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
-print(grafo.verificaCiclos(1))
+grafo.mostraMatriz()
+
+
+    
+
+    # 

@@ -73,31 +73,41 @@ class Grafo(object):
     # Fonte: https://pt.stackoverflow.com/questions/227717/como-utilizar-o-algoritmo-de-verifica%C3%A7%C3%A3o-de-ciclo-em-grafos
 
     def verificaCiclos(self, nodo_inicial):
-        nodos_visitados = []
+        nodos_visitados = set()
         nodos_restantes = [nodo_inicial]
 
         while nodos_restantes:
             nodo_atual = nodos_restantes.pop()
-            nodos_visitados.append(nodo_atual)
+            if (self.matriz[nodo_atual-1][vizinho-1][1] == 1):
+                print("atual",nodo_atual)
+                nodos_visitados.add(nodo_atual)
 
-            for vizinho in self.retornaVizinhos(nodo_atual):
-                if vizinho in nodos_visitados:
-                    return True
+                for vizinho in self.retornaVizinhos(nodo_atual):
+                    print("abc",self.matriz[nodo_atual-1][vizinho-1][1])
+                    if vizinho in nodos_visitados:
+                        return True
 
-                nodos_restantes.append(vizinho)
-        
-        return False
+                    nodos_restantes.append(vizinho)
+            
+            return False
 
 
 grafo = Grafo()
-
 nomeArquivo = "grafo.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
-n = int(arquivo.readline())
+
+n = int(arquivo.readline())   
+
 grafo.inicializaMatriz(n)
+
 for linha in arquivo:
     linha = linha.split(' ')
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
 print(grafo.verificaCiclos(1))
+
+
+    
+
+    # 

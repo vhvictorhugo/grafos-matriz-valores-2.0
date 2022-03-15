@@ -90,11 +90,11 @@ class Grafo(object):
 
 
 grafo = Grafo()
+grafo.inicializaMatriz(n)
 
 nomeArquivo = "grafo.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
 n = int(arquivo.readline())
-grafo.inicializaMatriz(n)
 for linha in arquivo:
     linha = linha.split(' ')
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))

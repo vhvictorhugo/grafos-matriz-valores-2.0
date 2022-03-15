@@ -21,13 +21,6 @@ class Grafo(object):
 
         self.matriz[linha - 1][coluna - 1] = [peso, +1]
         self.matriz[coluna - 1][linha - 1] = [peso, -1]
-        
-    def retornaVizinhos(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
-        vizinhos = []
-        for i in range(len(self.matriz)):
-            if self.matriz[vertice - 1][i][0] != 0:
-                vizinhos.append(i + 1)
-        return vizinhos
 
     # TESTAR
 
@@ -69,35 +62,50 @@ class Grafo(object):
     #             grau += 1
     #     return grau
 
+    # Cria uma copia da matriz de adjacencia e uma lista de vertices, chama a verificacao
+    def verificaCiclo(self):
+        vertices = []
+        matriztemp = []
+        for i in range(len(self.matriz)):
+            vertices.append(Elemento())
+            vertices[i].vertice = i + 1
+        for i in range(len(self.matriz)):
+            matriztemp.append([0] * len(self.matriz))
+            for j in range(len(self.matriz)):
+                matriztemp[i][j] = (self.matriz[i][j])
+        return self.verificacao(vertices, 0, matriztemp)
 
-    # Fonte: https://pt.stackoverflow.com/questions/227717/como-utilizar-o-algoritmo-de-verifica%C3%A7%C3%A3o-de-ciclo-em-grafos
-
-    def verificaCiclos(self, nodo_inicial):
-        nodos_visitados = []
-        nodos_restantes = [nodo_inicial]
-
-        while nodos_restantes:
-            nodo_atual = nodos_restantes.pop()
-            nodos_visitados.append(nodo_atual)
-
-            for vizinho in self.retornaVizinhos(nodo_atual):
-                if vizinho in nodos_visitados:
-                    return True
-
-                nodos_restantes.append(vizinho)
-        
+    # Verifica se possui um ciclo, marcando vertices e excluindo arestas ja visitadas.
+    def verificacao(self, vertices, v, matriztemp):
+        if vertices[v].marcado:
+            return True
+        else:
+            for i in range(len(self.matriz)):
+                if matriztemp[v][i] != 0:
+                    vertices[v].marcado = True
+                    matriztemp[v][i] = 0
+                    matriztemp[i][v] = 0
+                    vertices[v].proximo = i + 1
+                    return self.verificacao(vertices, i, matriztemp)
         return False
 
 
 grafo = Grafo()
-
 nomeArquivo = "grafo.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
-n = int(arquivo.readline())
+
+n = int(arquivo.readline())   
+
 grafo.inicializaMatriz(n)
+
 for linha in arquivo:
     linha = linha.split(' ')
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
-print(grafo.verificaCiclos(1))
+grafo.mostraMatriz()
+
+
+    
+
+    # 
