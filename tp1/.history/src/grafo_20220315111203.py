@@ -459,33 +459,23 @@ class Grafo(object):
     def heuristicaGulosa(self):
         S = []
         numeroIndependência = 0
-        vertices = []
-        verticesEGraus = [] # lista auxiliar para salvar os vertices e seus respectivos graus
-        
-        # recuperando os vértices e seus respectivos graus
-        for v in self.listarVertices().copy():
-            verticesEGraus.append([v, self.grauVertice(v)])
-
-        # ordenando os vértices em ordem decrescente de graus
-        verticesEGraus = sorted(verticesEGraus, key=itemgetter(1), reverse=True)
+        vertices = self.listarVertices()    # nao esquecer que os vértices sao listados de acordo com sua representacao e a matriz começa em 0
+        verticesEGraus = []
+        for c in vertices:
+            verticesEGraus.append([c, self.grauVertice(c)])
             
-        for v in verticesEGraus:
-            vertices.append(v[0])
-        
-        while (len(vertices) > 0):
-            # recupera vertice de maior grau
-            maiorGrau = vertices[0]
-            # remove vertice de maior grau
-            vertices.pop(0)
-            # remove vizinhos do vertice de maior grau
-            for vizinho in self.retornaVizinhos(maiorGrau):
-                if(vizinho not in vertices):
-                    break
-                indiceVizinho = vertices.index(vizinho)
-                vertices.pop(indiceVizinho)
+        # ordenando os vértices em ordem decrescente de graus
+        verticesEGraus = sorted(verticesEGraus[0], key=itemgetter(1), reverse=True)
+        print(vertices)
+        print(verticesEGraus)
 
-            S.append(maiorGrau)
+        while (len(vertices) != 0):
+            maiorGrau = verticesEGraus[0][0]
+            # remocao do vertice de maior grau
+            print(len(vertices))
+            
+            vertices.pop(vertices.index(verticesEGraus[0][0]))
+            print(len(vertices))
+            print(vertices)
 
-            numeroIndependência += 1
-
-        return numeroIndependência, S
+            # remocao dos vizinhos do vertice de maior grau
