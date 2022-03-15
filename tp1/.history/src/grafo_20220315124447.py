@@ -472,17 +472,20 @@ class Grafo(object):
         for v in verticesEGraus:
             vertices.append(v[0])
         
-        while (len(vertices) > 0):
+        while (len(vertices) != 0):
             # recupera vertice de maior grau
             maiorGrau = vertices[0]
+            print(maiorGrau)
             # remove vertice de maior grau
             vertices.pop(0)
+            print(vertices)
             # remove vizinhos do vertice de maior grau
             for vizinho in self.retornaVizinhos(maiorGrau):
-                if(vizinho not in vertices):
-                    break
+                print(vizinho)
                 indiceVizinho = vertices.index(vizinho)
+                print("indice vizinho: ", indiceVizinho)
                 vertices.pop(indiceVizinho)
+                print(vertices)
 
             S.append(maiorGrau)
 

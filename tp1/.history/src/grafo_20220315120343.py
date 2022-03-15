@@ -459,33 +459,45 @@ class Grafo(object):
     def heuristicaGulosa(self):
         S = []
         numeroIndependência = 0
-        vertices = []
+        vertices = []   # nao esquecer que os vértices sao listados de acordo com sua representacao e a matriz começa em 0
         verticesEGraus = [] # lista auxiliar para salvar os vertices e seus respectivos graus
         
         # recuperando os vértices e seus respectivos graus
         for v in self.listarVertices().copy():
             verticesEGraus.append([v, self.grauVertice(v)])
 
+        print(verticesEGraus)
+
         # ordenando os vértices em ordem decrescente de graus
         verticesEGraus = sorted(verticesEGraus, key=itemgetter(1), reverse=True)
+
+        print(verticesEGraus)
             
         for v in verticesEGraus:
             vertices.append(v[0])
+
+        print(vertices)
+        print(verticesEGraus)
+            
         
-        while (len(vertices) > 0):
-            # recupera vertice de maior grau
-            maiorGrau = vertices[0]
-            # remove vertice de maior grau
-            vertices.pop(0)
-            # remove vizinhos do vertice de maior grau
-            for vizinho in self.retornaVizinhos(maiorGrau):
-                if(vizinho not in vertices):
-                    break
-                indiceVizinho = vertices.index(vizinho)
-                vertices.pop(indiceVizinho)
+        
+        # atribuindo ordenacao à lista vertices
 
-            S.append(maiorGrau)
+        for i in range(len(verticesEGraus)):
+            vertices = verticesEGraus[0]
+            
+        print(vertices)
+        print(verticesEGraus)
 
-            numeroIndependência += 1
+        input("pause")
 
-        return numeroIndependência, S
+        while (len(vertices) != 0):
+            maiorGrau = verticesEGraus[0][0]
+            # remocao do vertice de maior grau
+            print(len(vertices))
+            
+            vertices.pop(vertices.index(verticesEGraus[0][0]))
+            print(len(vertices))
+            print(vertices)
+
+            # remocao dos vizinhos do vertice de maior grau
