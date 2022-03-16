@@ -16,7 +16,7 @@ def inicializar(grafoNaoDirigido, grafoOrientado, tipoEntrada):
         nomeArquivo = input("Digite o nome do arquivo txt: ")
 
 
-    arquivo = open(f'arquivos\\{nomeArquivo}', 'r')
+    arquivo = open(f'\\arquivos\\{nomeArquivo}', 'r')
 
     n = int(arquivo.readline())
 
@@ -29,14 +29,14 @@ def inicializar(grafoNaoDirigido, grafoOrientado, tipoEntrada):
             linha = linha.split(' ')
             grafoOrientado.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
         arquivo.close()
-        print("Grafo Orientado inicializado") 
+        print("Grafo inicializado") 
     elif(escolha == 2):
         grafoNaoDirigido.inicializaMatriz(n)
         for linha in arquivo:
             linha = linha.split(' ')
             grafoNaoDirigido.atribuiPeso((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
         arquivo.close()
-        print("Grafo Não Orientado inicializado") 
+        print("Grafo inicializado") 
 
 def escolherArquivo(grafoNaoDirigido, grafoOrientado):
     print("_"* 60)
