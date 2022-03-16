@@ -1,12 +1,3 @@
-from nbformat import read
-
-
-class Elemento(object):
-    def __init__(self):
-        self.vertice = 0
-        self.proximo = 0
-        self.marcado = False
-
 class Grafo(object):
     def __init__(self):  # inicializa as estruturas base do grafo
         self.matriz = []
@@ -37,56 +28,25 @@ class Grafo(object):
         for i in range(len(self.matriz)):
             vertices.append(i+1)
         return vertices
-    
-    # Cria uma copia da matriz e uma lista de vertices, chama a verificacao
-    def verificaCiclo(self):
-        vertices = []
-        matriztemp = []
-        contFalsos = 0  # conta a quantidade de verificacoes falsas para ciclos
-        for i in range(len(self.matriz)):
-            vertices.append(Elemento())
-            vertices[i].vertice = i + 1
-        for i in range(len(self.matriz)):
-            matriztemp.append([0, 0] * len(self.matriz))
-            for j in range(len(self.matriz)):
-                matriztemp[i][j] = (self.matriz[i][j])
-        # faz a verificacao para cada vertice i (grafos desconexos)
-        for i in range(len(self.matriz)):
-            if (self.verificacao(vertices, i, matriztemp) == False):
-                contFalsos += 1
-            else:
-                return True
+
+    def dfs(self, vertice):
+        visitados = []
         
-        return False
+        def dfs_recursiva(self, vertice): # default: comecar pelo vertice 1
+            visitados.append(vertice)
+            for vizinho in self.retornaVizinhos(vertice-1):
+                if vizinho not in visitados:
+                    dfs_recursiva(grafo, vizinho)
 
-    # Verifica se possui um ciclo, marcando vertices e excluindo arestas ja visitadas.
-    def verificacao(self, vertices, v, matriztemp):
-        if vertices[v].marcado:
-            return True
-        else:
-            for i in range(len(self.matriz)):
-                if (matriztemp[v][i][0] != 0) and (matriztemp[v][i][1] != -1):
-                    vertices[v].marcado = True
-                    matriztemp[v][i][0] = 0
-                    matriztemp[i][v][0] = 0
-                    vertices[v].proximo = i + 1
-                    return self.verificacao(vertices, i, matriztemp)
-        return False
-
-    def grauInterno(self, vertice):        
-        grau = 0
-        for i in range(len(self.matriz)):
-            valorOrientacao = self.matriz[vertice][i][1]
-            if(valorOrientacao == -1):  # codigo contendo uma matriz temporaria, a fim de recalcular o grau a cada alteracao no grafo
-                grau += 1
-        return grau
+        dfs_recursiva(grafo, vertice) 
+    
+    
 
     # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
         # citar na documentacao: numeracao de vertices deve comecar a partir de 1
         # Ordenação topológica baseada no grau de entrada dos vértices
         ordem_topologica = []
-
         # Calcula graus de entrada.
         graus_entrada = [0 for _ in range(len(self.matriz))]
         for i in range(len(self.matriz)):
@@ -108,7 +68,7 @@ class Grafo(object):
         return ordem_topologica
 
 grafo = Grafo()
-nomeArquivo = "grafo_t.txt"
+nomeArquivo = "grafo.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
 n = int(arquivo.readline())
 grafo.inicializaMatriz(n)
@@ -118,4 +78,5 @@ for linha in arquivo:
 arquivo.close()
 
 #print("Grafo possui ciclo?", grafo.verificaCiclo())
-print(grafo.ordenacao_topologica())
+print("Ordenacao Topologica:", grafo.ordenacao_topologica())
+print("Busca: ", grafo.dfs(1))
