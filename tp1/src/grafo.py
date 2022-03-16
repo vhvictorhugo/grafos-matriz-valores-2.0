@@ -1,4 +1,6 @@
 # https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/representacao-grafos/
+from ast import Return
+from functools import reduce
 import json
 from tkinter import N
 import sys
@@ -499,3 +501,103 @@ class Grafo(object):
             numeroIndependência += 1
 
         return numeroIndependência, S
+
+   
+    def calcularSaturacaoVertice(self, vertice, cores):
+        vizinhos = self.retornaVizinhos(vertice)
+       
+        sat = []
+        for i in range(len(cores)):
+            for v in cores[i]:
+                if v in vizinhos and i not in sat:
+                    sat.append(i)
+        return len(sat)
+
+    def calcularMaiorGrauSaturacao(self, sat, vertices):
+        maior = -1
+        
+        for v in sat:
+            if v[1] != None:
+                if v[1] > maior:
+                    x = []
+                    x.append(v[0])
+                    maior = v[1]
+                elif  v[1] == maior:
+                    x.append(v[0])
+
+        maior = -1
+        
+       
+        for v in x:
+            grau = 0
+            vizinhos = self.retornaVizinhos(v)
+          
+            for y in  vizinhos:
+                if y in vertices:
+                    grau+=1
+            if (grau > maior):
+                m = v
+                maior = grau
+
+        return m
+            
+            
+    def ColorirVertice(self, vertice, cores):
+        vizinhos = self.retornaVizinhos(vertice)
+        
+        for i in range(len(cores)):
+            disponivel = True
+            for v in cores[i] :
+                if v in vizinhos:
+                    disponivel = False
+            if (disponivel):
+                cores[i].append(vertice)
+                return
+        cores.append([vertice])
+
+        
+    def numeroCromatico(self):
+        vertices = []
+        maior = -1
+        cores = []      
+        saturacao = []
+       
+        for i in range(len(self.matriz)):
+            if self.grauVertice(i+1) > maior:
+                maior = self.grauVertice(i+1)
+                x = i + 1
+            saturacao.append([i+1, None])
+            vertices.append(i + 1)
+        
+        vertices.remove(x)
+        saturacao[x-1][1] = None
+        cores.append([x])
+       
+        while len(vertices) > 0:
+            vizinhos = self.retornaVizinhos(x)
+            encontrou = False
+            for vertice in vizinhos:
+                if vertice in vertices:
+                    s = self.calcularSaturacaoVertice(vertice, cores)
+                    saturacao[vertice-1][1] = s
+                    encontrou = True
+            if (not encontrou):
+                maior = -1
+                for i in vertices:
+                    if self.grauVertice(i) > maior:
+                        maior = self.grauVertice(i)
+                        x = i 
+                self.ColorirVertice(x, cores)
+                vertices.remove(x)
+            else:  
+                x = self.calcularMaiorGrauSaturacao(deepcopy(saturacao), deepcopy(vertices))
+                saturacao[x-1][1] = None
+                self.ColorirVertice(x, cores)
+                vertices.remove(x)
+
+        return len(cores)
+
+
+        
+        
+        

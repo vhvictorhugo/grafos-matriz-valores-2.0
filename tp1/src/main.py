@@ -15,7 +15,7 @@ def inicializar(mGrafo, tipoEntrada):
     else:
         nomeArquivo = input("Digite o nome do arquivo txt: ")
 
-    arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
+    arquivo = open(f'D:\\Programacao\\FACULDADE\\Grafos\\Grafos-TPII\\tp1\\src\\grafo_bl2.txt', 'r')
 
     n = int(arquivo.readline())   
 
@@ -51,6 +51,7 @@ def menuFuncoes():
         print("11) A árvore geradora mínima de um grafo ")
         print("12) Verificar se um grafo é euleriano ")
         print("13) Conjunto independente")
+        print("14) Numero cromatico")
         print("0) Sair")
         
         escolha = int(input("->"))
@@ -107,7 +108,9 @@ def menuFuncoes():
 
         elif escolha == 13:
             print("Conjunto de independencia:", mGrafo.heuristicaGulosa()[1])
-            
+        
+        elif escolha == 14:
+            print("Numero cromatico do grafo é :", mGrafo.numeroCromatico())
         else:
             break
 def printArvoreMinima():
