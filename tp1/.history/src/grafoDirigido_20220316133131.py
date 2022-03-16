@@ -63,7 +63,8 @@ class Grafo(object):
                             pais.append(paiDosPais)
                 for pai in pais:
                     if(pai == vizinho):
-                        flag[0] = True
+                        flag[0] = 1
+        return flag            
 
     def retornaPais(self, v):   # retorna todos os pais de um vertice
         pais = []
@@ -109,7 +110,12 @@ for linha in arquivo:
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
-visitados = set() # Set to keep track of visited nodes of graph
+#print("Grafo possui ciclo?", grafo.verificaCiclo())
+
+# print("Ordenacao Topologica:", grafo.ordenacao_topologica())
+
+visited = set() # Set to keep track of visited nodes of graph.
+
 """
 aqui iremos explorar o conceito de referencia na linguagem Python:
     quando criamos uma lista, como no caso de 'vetorSolucao', e a atribuimos a outra variavel,
@@ -118,15 +124,14 @@ aqui iremos explorar o conceito de referencia na linguagem Python:
 """
 vetorSolucao = [False]  # indica que não há ciclos no
 """
-passamos esta lista por referência em 'def_recursiva', pois é esta lista que 
-queremos alterar ao longo das chamadas recursivas
-caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1 
-posição é alterada de '[False]' para '[True]'
+passamos esta lista por referência em 'def_recursiva', pois é esta lista que queremos alterar ao longo das
+chamadas recursivas
+caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1 posição é alterada de '[0]'
+para '[1]'
 """
-#print(grafo.dfs_recursiva(0,visitados,vetorSolucao))
-grafo.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
-if(vetorSolucao[0] == False):
-    print("Grafo Acíclico!")
-    print("Ordenacao Topologica:", grafo.ordenacao_topologica())
-else:
-    print("Grafo Cíclico, não é possível fazer a ordenação topológica!")
+# 
+
+# Driver Code
+print("Following is the Depth-First Search")
+visitados = set()
+print(grafo.dfs_recursiva(0,visitados,vetorSolucao))

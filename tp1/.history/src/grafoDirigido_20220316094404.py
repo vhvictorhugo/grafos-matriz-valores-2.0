@@ -20,14 +20,7 @@ class Grafo(object):
         vizinhos = []
         for i in range(len(self.matriz)):
             if (self.matriz[vertice][i][1] == 1):
-                vizinhos.append(i+1)
-        return vizinhos
-
-    def retornaVizinhos2(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
-        vizinhos = []
-        for i in range(len(self.matriz)):
-            if (self.matriz[vertice][i][1] == 1):
-                vizinhos.append(i)
+                vizinhos.append(i + 1)
         return vizinhos
 
     def listarVertices(self):
@@ -35,44 +28,73 @@ class Grafo(object):
         for i in range(len(self.matriz)):
             vertices.append(i+1)
         return vertices
-
-    """ Como aprendido em aula:
-        Um grafo orientado é acíclico se, e somente se, não são encontrados 
-        arcos de retorno durante uma busca em profundidade
-    """
     #FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/busca-profundidade/#:~:text=O%20algoritmo%20de%20busca%20em,j%C3%A1%20visitado%2C%20retornamos%20da%20busca.
-    # busca em profundidade
-    def dfs_recursiva(self, vertice, visitados, flag):
+    def dfs_recursiva(self, vertice, visitados):
         visitados.add(vertice)
         falta_visitar = [vertice]
-        for vizinho in self.retornaVizinhos(vertice-1):
+        for vizinho in self.listarVertices(vertice-1):
             if vizinho not in visitados:
                 visitados.add(vizinho)
                 falta_visitar.append(vizinho)
-                self.dfs_recursiva(vizinho, visitados,flag)
+                self.dfs_recursiva(grafo, vizinho, visitados)
             else:
-                """
-                seleciona todos os pais e pais dos pais daquele vértice para 
-                verificar se seu vizinho está ali incluso                
-                """
-                pais = self.retornaPais(vertice)
-                for pai in pais:
-                    paisDosPais = self.retornaPais(pai)
-                    for paiDosPais in paisDosPais:
-                        if(paiDosPais not in pais):
-                            pais.append(paiDosPais)
-                for pai in pais:
-                    if(pai == vizinho):
-                        flag[0] = True
+                if(self.ehDescendente(vertice, vizinho)):
+                return False
 
-    def retornaPais(self, v):   # retorna todos os pais de um vertice
+    def ehDescendente(self, v, w):
         pais = []
         for i in range(len(self.matriz)):
-                vizinhos = self.retornaVizinhos(i-1)
-                for vizinho in vizinhos:
-                    if(vizinho == v):
-                        pais.append(i)
-        return pais
+            if (self.retornaVizinhos(i) == v):
+                pais.append(i)
+                for p in pais:
+                    self.ehDescendente(pais.index(p, w))
+        if(w in pais):
+            return True
+        
+    
+    # def dfs(self):
+    #     visitados = set()   # vértices marcados
+
+    #     def dfs_iterativa(vertice_fonte):
+            
+    #         visitados.add(vertice_fonte)
+    #         vertices = self.listarVertices()                    # lista de vértices restantes
+    #         falta_visitar = [vertice_fonte]                     # vértices a visitar
+    #         while falta_visitar:                                # enquanto existir vertice nao visitado
+    #             vertice = falta_visitar.pop()
+    #             for vizinho in self.retornaVizinhos(vertice-1):   # percorre vizinhos do vértice v
+    #                 if vizinho not in visitados:                # se w é não marcado
+    #                     visitados.add(vizinho)
+    #                     falta_visitar.append(vizinho)
+    #                     vertices.remove()
+    #                 else: # explora arestas que não fazem parte da árvore de profundidade
+    #                     """
+    #                     Sabemos que:
+    #                     • Um grafo orientado é acíclico se, e somente se, não são encontrados arcos de retorno 
+    #                     durante uma busca em profundidade e também sabemos que:
+    #                     • Se v é descendente de w na floresta/árvore, então é um arco de retorno.
+    #                     • v: vertice; w: vizinho
+    #                     """
+    #                     if(vertice in self.retornaVizinhos(vizinho-1)):
+    # #                         return False
+    #     contFalsos = 0
+    #     if(grafo.dfs_recursiva(1) == False):
+    #         contFalsos += 1
+
+    #     if(contFalsos == 0):
+    #         return False
+    #     else:
+    #         return True
+        
+
+    """
+    def dfs(self, visited, node):  #function for dfs 
+        if node not in visited:
+            print (node)
+            visited.add(node)            
+            for neighbour in self.retornaVizinhos(node-1):
+                self.dfs(visited, neighbour)
+    """
 
     # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
@@ -109,24 +131,11 @@ for linha in arquivo:
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
-visitados = set() # Set to keep track of visited nodes of graph
-"""
-aqui iremos explorar o conceito de referencia na linguagem Python:
-    quando criamos uma lista, como no caso de 'vetorSolucao', e a atribuimos a outra variavel,
-    como em parâmetros de funções ou até mesmo uma simples atribuição, se não criarmos uma cópia
-    é passada sua referência e portanto, você estará utilizando aquela mesma lista
-"""
-vetorSolucao = [False]  # indica que não há ciclos no
-"""
-passamos esta lista por referência em 'def_recursiva', pois é esta lista que 
-queremos alterar ao longo das chamadas recursivas
-caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1 
-posição é alterada de '[False]' para '[True]'
-"""
-#print(grafo.dfs_recursiva(0,visitados,vetorSolucao))
-grafo.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
-if(vetorSolucao[0] == False):
-    print("Grafo Acíclico!")
-    print("Ordenacao Topologica:", grafo.ordenacao_topologica())
-else:
-    print("Grafo Cíclico, não é possível fazer a ordenação topológica!")
+#print("Grafo possui ciclo?", grafo.verificaCiclo())
+# print("Ordenacao Topologica:", grafo.ordenacao_topologica())
+# print("Busca: ", grafo.dfs(1))
+visited = set() # Set to keep track of visited nodes of graph.
+# Driver Code
+print("Following is the Depth-First Search")
+visitados = set()
+print(grafo.dfs_recursiva(1,visitados))

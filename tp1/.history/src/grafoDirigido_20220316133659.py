@@ -124,9 +124,8 @@ caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1
 posição é alterada de '[False]' para '[True]'
 """
 #print(grafo.dfs_recursiva(0,visitados,vetorSolucao))
-grafo.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
-if(vetorSolucao[0] == False):
-    print("Grafo Acíclico!")
-    print("Ordenacao Topologica:", grafo.ordenacao_topologica())
-else:
-    print("Grafo Cíclico, não é possível fazer a ordenação topológica!")
+grafo.dfs_recursiva(0,visitados,vetorSolucao)
+print(vetorSolucao[0])
+
+# print("Ordenacao Topologica:", grafo.ordenacao_topologica())
+
