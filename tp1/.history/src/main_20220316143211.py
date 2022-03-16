@@ -163,7 +163,7 @@ def menuDirigido():
     grafoOrientado.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
     if(vetorSolucao[0] == False):
         print("Grafo Acíclico!")
-        print("Ordenacao Topologica:", grafoOrientado.ordenacao_topologica())
+        print("Ordenacao Topologica:", grafo.ordenacao_topologica())
     else:
         print("Grafo Cíclico, não é possível fazer a ordenação topológica!")
 

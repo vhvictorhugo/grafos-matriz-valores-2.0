@@ -1,4 +1,4 @@
-class GrafoDirigido(object):
+class Grafo(object):
     def __init__(self):  # inicializa as estruturas base do grafo
         self.matriz = []
 
@@ -98,3 +98,35 @@ class GrafoDirigido(object):
                 if graus_entrada[vizinho-1] == 0:
                     fila.append(vizinho-1)
         return ordem_topologica
+
+# grafo = Grafo()
+# nomeArquivo = "grafo.txt"
+# arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
+# n = int(arquivo.readline())
+# grafo.inicializaMatriz(n)
+# for linha in arquivo:
+#     linha = linha.split(' ')
+#     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
+# arquivo.close()
+
+# visitados = set() # Set to keep track of visited nodes of graph
+# """
+# aqui iremos explorar o conceito de referencia na linguagem Python:
+#     quando criamos uma lista, como no caso de 'vetorSolucao', e a atribuimos a outra variavel,
+#     como em parâmetros de funções ou até mesmo uma simples atribuição, se não criarmos uma cópia
+#     é passada sua referência e portanto, você estará utilizando aquela mesma lista
+# """
+# vetorSolucao = [False]  # indica que não há ciclos no
+# """
+# passamos esta lista por referência em 'def_recursiva', pois é esta lista que 
+# queremos alterar ao longo das chamadas recursivas
+# caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1 
+# posição é alterada de '[False]' para '[True]'
+# """
+# #print(grafo.dfs_recursiva(0,visitados,vetorSolucao))
+# grafo.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
+# if(vetorSolucao[0] == False):
+#     print("Grafo Acíclico!")
+#     print("Ordenacao Topologica:", grafo.ordenacao_topologica())
+# else:
+#     print("Grafo Cíclico, não é possível fazer a ordenação topológica!")

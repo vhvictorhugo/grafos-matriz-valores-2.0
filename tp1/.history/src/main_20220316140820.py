@@ -6,7 +6,7 @@ def printMenu():
     print("_"* 60)
     print(3*"\t","MENU")
     print("_"* 60)
-def inicializar(grafoNaoDirigido, grafoOrientado, tipoEntrada):
+def inicializar(grafoNaoDirigido, tipoEntrada):
 
     if tipoEntrada == 1:
         nomeArquivo = input("Digite o nome do arquivo Json: ")
@@ -20,30 +20,32 @@ def inicializar(grafoNaoDirigido, grafoOrientado, tipoEntrada):
     n = int(arquivo.readline())
 
     print("_"* 60)
-    print("Escolha o tipo do grafo:\n1) Orientado\n2) Não orientado")
-    escolha = int(input())
+    escolha = int(input("Escolha o tipo do grafo:\n1) Orientado\n2) Não orientado"))
     if(escolha == 1):
-        grafoOrientado.inicializaMatriz(n)
-        for linha in arquivo:
-            linha = linha.split(' ')
-            grafoOrientado.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
-        arquivo.close()
-        print("Grafo inicializado") 
+        grafoDirigido = grafoDirigido
     elif(escolha == 2):
         grafoNaoDirigido.inicializaMatriz(n)
         for linha in arquivo:
             linha = linha.split(' ')
             grafoNaoDirigido.atribuiPeso((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
         arquivo.close()
-        print("Grafo inicializado") 
 
-def escolherArquivo(grafoNaoDirigido, grafoOrientado):
+        print("Grafo inicializado")
+    
+    escolherTipoGrafo(grafoNaoDirigido, grafoDirigido, n)
+
+def escolherTipoGrafo(grafoNaoDirigido, grafoDirigido, n):
+    
+
+def escolherArquivo(grafoNaoDirigido, grafoDirigido, g):
     print("_"* 60)
     print(3*"\t","MENU")
     print("_"* 60)
     print("Escolha o formato da entrada de arquivo:\n1) Json\n2) txt")
     tipo = int(input("->"))
-    inicializar(grafoNaoDirigido, grafoOrientado, tipo)
+    inicializar(grafoNaoDirigido, tipo)
+    
+
 
 def menuFuncoes():
     while True:
@@ -144,57 +146,29 @@ def printArvoreMinima():
         arquivo.close()
     else:
         print("Grafo desconexo, logo nao eh possivel!")
-def menuDirigido():
-    visitados = set() # Set to keep track of visited nodes of graph
-    """
-    aqui iremos explorar o conceito de referencia na linguagem Python:
-        quando criamos uma lista, como no caso de 'vetorSolucao', e a atribuimos a outra variavel,
-        como em parâmetros de funções ou até mesmo uma simples atribuição, se não criarmos uma cópia
-        é passada sua referência e portanto, você estará utilizando aquela mesma lista
-    """
-    vetorSolucao = [False]  # indica que não há ciclos no
-    """
-    passamos esta lista por referência em 'def_recursiva', pois é esta lista que 
-    queremos alterar ao longo das chamadas recursivas
-    caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1 
-    posição é alterada de '[False]' para '[True]'
-    """
-    #print(grafo.dfs_recursiva(0,visitados,vetorSolucao))
-    grafoOrientado.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
-    if(vetorSolucao[0] == False):
-        print("Grafo Acíclico!")
-        print("Ordenacao Topologica:", grafoOrientado.ordenacao_topologica())
-    else:
-        print("Grafo Cíclico, não é possível fazer a ordenação topológica!")
 
 grafoNaoDirigido = None
-grafoOrientado = None
+grafoDirigido = None
 while True:
     printMenu()
     print("1) Escolher o arquivo")
-    print("2) Usar as funcoes do grafo (grafo não dirigido)")
-    print("3) Usar grafo dirigido")
-    print("4) Converter o grafo para Json")
+    print("2) Usar as funcoes do grafo")
+    print("3) Converter o grafo para Json")
     print("0) Sair")
     escolha = int(input("->"))
     if escolha == 1:
         grafoNaoDirigido = grafo.Grafo()
-        grafoOrientado = grafoDirigido.GrafoDirigido()
-        escolherArquivo(grafoNaoDirigido, grafoOrientado)
+        grafoDirigido = grafoDirigido.Grafo()
+        escolherArquivo(grafoNaoDirigido)
 
     if escolha == 2:
         if grafoNaoDirigido == None: 
             print("Primeiro Inicialize o Grafo")
+            print(grafoNaoDirigido)
         else:
             menuFuncoes()
 
     if escolha == 3:
-        if(grafoOrientado == None):
-            print("Primeiro Inicialize o Grafo")
-        else:
-            menuDirigido()
-
-    if escolha == 4:
         if grafoNaoDirigido == None: 
             print("Primeiro Inicialize o Grafo")
         else:
