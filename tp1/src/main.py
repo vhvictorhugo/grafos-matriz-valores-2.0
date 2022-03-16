@@ -1,4 +1,4 @@
-
+import grafoDirigido
 import grafo
 import os
 
@@ -6,35 +6,46 @@ def printMenu():
     print("_"* 60)
     print(3*"\t","MENU")
     print("_"* 60)
-def inicializar(mGrafo, tipoEntrada):
+def inicializar(grafoNaoDirigido, grafoOrientado, tipoEntrada):
 
     if tipoEntrada == 1:
         nomeArquivo = input("Digite o nome do arquivo Json: ")
-        mGrafo.lerJson(nomeArquivo)
+        grafoNaoDirigido.lerJson(nomeArquivo)
         nomeArquivo = nomeArquivo.replace("json","txt")
     else:
         nomeArquivo = input("Digite o nome do arquivo txt: ")
 
-    arquivo = open(f'D:\\Programacao\\FACULDADE\\Grafos\\Grafos-TPII\\tp1\\src\\grafo_bl2.txt', 'r')
 
-    n = int(arquivo.readline())   
+    arquivo = open(f'arquivos\\{nomeArquivo}', 'r')
 
-    mGrafo.inicializaMatriz(n)
+    n = int(arquivo.readline())
 
+    print("_"* 60)
+    print("Escolha o tipo do grafo:\n1) Orientado\n2) Não orientado")
+    escolha = int(input())
+    if(escolha == 1):
+        grafoOrientado.inicializaMatriz(n)
+        for linha in arquivo:
+            linha = linha.split(' ')
+            grafoOrientado.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
+        arquivo.close()
+        print("Grafo Orientado inicializado") 
+    elif(escolha == 2):
+        grafoNaoDirigido.inicializaMatriz(n)
+        for linha in arquivo:
+            linha = linha.split(' ')
+            grafoNaoDirigido.atribuiPeso((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
+        arquivo.close()
+        print("Grafo Não Orientado inicializado") 
 
-    for linha in arquivo:
-        linha = linha.split(' ')
-        mGrafo.atribuiPeso((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
-    arquivo.close()
-
-    print("Grafo inicializado")     
-def escolherArquivo(mGrafo):
+def escolherArquivo(grafoNaoDirigido, grafoOrientado):
     print("_"* 60)
     print(3*"\t","MENU")
     print("_"* 60)
     print("Escolha o formato da entrada de arquivo:\n1) Json\n2) txt")
     tipo = int(input("->"))
-    inicializar(mGrafo, tipo)
+    inicializar(grafoNaoDirigido, grafoOrientado, tipo)
+
 def menuFuncoes():
     while True:
         printMenu()
@@ -56,110 +67,139 @@ def menuFuncoes():
         
         escolha = int(input("->"))
 
-        if mGrafo == None: 
+        if grafoNaoDirigido == None: 
             print("Primeiro Inicialize o Grafo")
          
            
         elif escolha == 1:
-            print("Ordem do grafo: ",mGrafo.ordem())
+            print("Ordem do grafo: ",grafoNaoDirigido.ordem())
       
 
         elif escolha == 2:
-            print("Tamanho do grafo: ",mGrafo.tamanho())
+            print("Tamanho do grafo: ",grafoNaoDirigido.tamanho())
      
         elif escolha == 3:
-            print("A desidade do grafo e ",mGrafo.densidade())
+            print("A desidade do grafo e ",grafoNaoDirigido.densidade())
               
         elif escolha == 4:
             vertice = int(input("Escolha um verticer para saber seu vizinhos:\n->"))
-            print("Vizinho de um vertice:",mGrafo.retornaVizinhos(vertice))
+            print("Vizinho de um vertice:",grafoNaoDirigido.retornaVizinhos(vertice))
               
         elif escolha == 5:
             vertice = int(input("Escolha um vertice:\n->"))
-            print("Vertice de grau:",mGrafo.grauVertice(vertice))
+            print("Vertice de grau:",grafoNaoDirigido.grauVertice(vertice))
              
         elif escolha == 6:
             vertice = int(input("Escolha um vertice pra comecar:\n->"))
-            print("O vertice e articulacao") if mGrafo.articulacao(vertice) else print("O vertice nao e articulacao") 
+            print("O vertice e articulacao") if grafoNaoDirigido.articulacao(vertice) else print("O vertice nao e articulacao") 
                           
         elif escolha == 7:
             vertice = int(input("Escolha um vertice pra comecar:\n->"))
             print("busca em largura:")
-            mGrafo.buscaEmLargura(vertice)
+            grafoNaoDirigido.buscaEmLargura(vertice)
 
         elif escolha == 8:
-            print("Numero de componentes conexas: ", mGrafo.componentesConexas(mGrafo.ordem())[0])
+            print("Numero de componentes conexas: ", grafoNaoDirigido.componentesConexas(grafoNaoDirigido.ordem())[0])
             print("Vertices de cada componente:\n")
-            mGrafo.mostraVerticesComponente(mGrafo.componentesConexas(mGrafo.ordem())[1])
+            grafoNaoDirigido.mostraVerticesComponente(grafoNaoDirigido.componentesConexas(grafoNaoDirigido.ordem())[1])
            
 
         elif escolha == 9:
-            print("O Grafo possui ciclo") if mGrafo.verificaCiclo() else print("O Grafo nao possui ciclo")
+            print("O Grafo possui ciclo") if grafoNaoDirigido.verificaCiclo() else print("O Grafo nao possui ciclo")
 
         elif escolha == 10:
             vertice = int(input("Escolha um vertice pra comecar:\n->"))
-            mGrafo.menorCaminhoVertice(vertice)            
+            grafoNaoDirigido.menorCaminhoVertice(vertice)            
         
         elif escolha == 11:
             printArvoreMinima()
             
         elif escolha == 12:
-            mGrafo.verificarEuliriano()       
+            grafoNaoDirigido.verificarEuliriano()       
 
         elif escolha == 13:
-            print("Conjunto de independencia:", mGrafo.heuristicaGulosa()[1])
+            print("Conjunto de independencia:", grafoNaoDirigido.heuristicaGulosa()[1])
         
         elif escolha == 14:
-            print("Numero cromatico do grafo é :", mGrafo.numeroCromatico())
+            print("Numero cromatico do grafo é :", grafoNaoDirigido.numeroCromatico())
         else:
             break
 def printArvoreMinima():
-    n=mGrafo.ordem()
+    n=grafoNaoDirigido.ordem()
     verificaComponentesConexas = False  # false: grafo possui mais de 1 componente conexa
 
-    if mGrafo.componentesConexas(n)[0] > 1:
+    if grafoNaoDirigido.componentesConexas(n)[0] > 1:
         verificaComponentesConexas = True   # grafo possui mais de 1 componente,
 
     if verificaComponentesConexas != True:
-        n=mGrafo.ordem()
-        mst = mGrafo.primMST(n)
+        n=grafoNaoDirigido.ordem()
+        mst = grafoNaoDirigido.primMST(n)
         # Criando e escrevendo em arquivos de texto (modo 'w'). escrita
         arquivo = open('arq01.txt','w')
 
         arquivo.write(str (n) + '\n')
 
         for i in range(1, n):
-            aresta1, aresta2, peso = mGrafo.getParams(mst, i)
+            aresta1, aresta2, peso = grafoNaoDirigido.getParams(mst, i)
             arquivo.write(str (aresta1) + ' ' + str (aresta2) + ' ' + str (peso) + '\n')
         arquivo.close()
     else:
         print("Grafo desconexo, logo nao eh possivel!")
+def menuDirigido():
+    visitados = set() # Set to keep track of visited nodes of graph
+    """
+    aqui iremos explorar o conceito de referencia na linguagem Python:
+        quando criamos uma lista, como no caso de 'vetorSolucao', e a atribuimos a outra variavel,
+        como em parâmetros de funções ou até mesmo uma simples atribuição, se não criarmos uma cópia
+        é passada sua referência e portanto, você estará utilizando aquela mesma lista
+    """
+    vetorSolucao = [False]  # indica que não há ciclos no
+    """
+    passamos esta lista por referência em 'def_recursiva', pois é esta lista que 
+    queremos alterar ao longo das chamadas recursivas
+    caso seja encontrado um arco de retorno na busca em profundidade esta lista de 1 
+    posição é alterada de '[False]' para '[True]'
+    """
+    #print(grafo.dfs_recursiva(0,visitados,vetorSolucao))
+    grafoOrientado.dfs_recursiva(0,visitados,vetorSolucao)   # efetua a chamada para obter a solucao em 'vetorSolucao'
+    if(vetorSolucao[0] == False):
+        print("Grafo Acíclico!")
+        print("Ordenacao Topologica:", grafoOrientado.ordenacao_topologica())
+    else:
+        print("Grafo Cíclico, não é possível fazer a ordenação topológica!")
 
-mGrafo = None
-print(mGrafo)
+grafoNaoDirigido = None
+grafoOrientado = None
 while True:
     printMenu()
     print("1) Escolher o arquivo")
-    print("2) Usar as funcoes do grafo")
-    print("3) Converter o grafo para Json")
+    print("2) Usar as funcoes do grafo (grafo não dirigido)")
+    print("3) Usar grafo dirigido")
+    print("4) Converter o grafo para Json")
     print("0) Sair")
     escolha = int(input("->"))
     if escolha == 1:
-        mGrafo = grafo.Grafo()
-        escolherArquivo(mGrafo)
+        grafoNaoDirigido = grafo.Grafo()
+        grafoOrientado = grafoDirigido.GrafoDirigido()
+        escolherArquivo(grafoNaoDirigido, grafoOrientado)
 
     if escolha == 2:
-        if mGrafo == None: 
+        if grafoNaoDirigido == None: 
             print("Primeiro Inicialize o Grafo")
-            print(mGrafo)
         else:
             menuFuncoes()
 
     if escolha == 3:
-        if mGrafo == None: 
+        if(grafoOrientado == None):
             print("Primeiro Inicialize o Grafo")
         else:
-            mGrafo.escreverJson()
+            menuDirigido()
+
+    if escolha == 4:
+        if grafoNaoDirigido == None: 
+            print("Primeiro Inicialize o Grafo")
+        else:
+            grafoNaoDirigido.escreverJson()
             
 
     if escolha == 0:

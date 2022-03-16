@@ -1,19 +1,13 @@
-# https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/representacao-grafos/
-from ast import Return
-from functools import reduce
 import json
-from tkinter import N
 import sys
 from copy import deepcopy
-from operator import itemgetter, attrgetter
+from operator import itemgetter
 
 class Elemento(object):
     def __init__(self):
         self.vertice = 0
         self.proximo = 0
         self.marcado = False
-
-
 class Grafo(object):
     def __init__(self):  # inicializa as estruturas base do grafo
         self.matriz = []
@@ -74,15 +68,12 @@ class Grafo(object):
             if vizinho not in marcados:
                 self.busca(vizinho, marcados)
 
-   
-
     def articulacao(self, vertice):
 
         if (vertice -1 < 0 or vertice > len(self.matriz)):
             return False
         for v in range(len(self.matriz)):
             c1 = self.componentesConexas(self.ordem())
-        
 
         mat = deepcopy(self.matriz)
 
@@ -95,8 +86,6 @@ class Grafo(object):
         self.matriz = deepcopy(mat)
       
         return not (c2[0] == c1[0])
-
-         
 
     def buscaEmLargura(self, vertice):
         fila = []
@@ -615,8 +604,3 @@ class Grafo(object):
                 V.remove(x)
 
         return len(cores)
-
-
-        
-        
-        

@@ -1,4 +1,4 @@
-class Grafo(object):
+class GrafoDirigido(object):
     def __init__(self):  # inicializa as estruturas base do grafo
         self.matriz = []
 
@@ -20,7 +20,14 @@ class Grafo(object):
         vizinhos = []
         for i in range(len(self.matriz)):
             if (self.matriz[vertice][i][1] == 1):
-                vizinhos.append(i + 1)
+                vizinhos.append(i+1)
+        return vizinhos
+
+    def retornaVizinhos2(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
+        vizinhos = []
+        for i in range(len(self.matriz)):
+            if (self.matriz[vertice][i][1] == 1):
+                vizinhos.append(i)
         return vizinhos
 
     def listarVertices(self):
@@ -29,18 +36,43 @@ class Grafo(object):
             vertices.append(i+1)
         return vertices
 
-    def dfs(self, vertice):
-        visitados = []
-        
-        def dfs_recursiva(self, vertice): # default: comecar pelo vertice 1
-            visitados.append(vertice)
-            for vizinho in self.retornaVizinhos(vertice-1):
-                if vizinho not in visitados:
-                    dfs_recursiva(grafo, vizinho)
+    """ Como aprendido em aula:
+        Um grafo orientado é acíclico se, e somente se, não são encontrados 
+        arcos de retorno durante uma busca em profundidade
+    """
+    #FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/busca-profundidade/#:~:text=O%20algoritmo%20de%20busca%20em,j%C3%A1%20visitado%2C%20retornamos%20da%20busca.
+    # busca em profundidade
+    def dfs_recursiva(self, vertice, visitados, flag):
+        visitados.add(vertice)
+        falta_visitar = [vertice]
+        for vizinho in self.retornaVizinhos(vertice-1):
+            if vizinho not in visitados:
+                visitados.add(vizinho)
+                falta_visitar.append(vizinho)
+                self.dfs_recursiva(vizinho, visitados,flag)
+            else:
+                """
+                seleciona todos os pais e pais dos pais daquele vértice para 
+                verificar se seu vizinho está ali incluso                
+                """
+                pais = self.retornaPais(vertice)
+                for pai in pais:
+                    paisDosPais = self.retornaPais(pai)
+                    for paiDosPais in paisDosPais:
+                        if(paiDosPais not in pais):
+                            pais.append(paiDosPais)
+                for pai in pais:
+                    if(pai == vizinho):
+                        flag[0] = True
 
-        dfs_recursiva(grafo, vertice) 
-    
-    
+    def retornaPais(self, v):   # retorna todos os pais de um vertice
+        pais = []
+        for i in range(len(self.matriz)):
+                vizinhos = self.retornaVizinhos(i-1)
+                for vizinho in vizinhos:
+                    if(vizinho == v):
+                        pais.append(i)
+        return pais
 
     # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
@@ -66,17 +98,3 @@ class Grafo(object):
                 if graus_entrada[vizinho-1] == 0:
                     fila.append(vizinho-1)
         return ordem_topologica
-
-grafo = Grafo()
-nomeArquivo = "grafo.txt"
-arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
-n = int(arquivo.readline())
-grafo.inicializaMatriz(n)
-for linha in arquivo:
-    linha = linha.split(' ')
-    grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
-arquivo.close()
-
-#print("Grafo possui ciclo?", grafo.verificaCiclo())
-print("Ordenacao Topologica:", grafo.ordenacao_topologica())
-print("Busca: ", grafo.dfs(1))
