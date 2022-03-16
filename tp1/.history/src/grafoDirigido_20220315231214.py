@@ -28,7 +28,7 @@ class Grafo(object):
     def retornaVizinhos(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
         vizinhos = []
         for i in range(len(self.matriz)):
-            if (self.matriz[vertice][i][1] == 1):
+            if (self.matriz[vertice - 1][i][0] != 0) and (self.matriz[vertice-1][i][1] == 1):
                 vizinhos.append(i + 1)
         return vizinhos
 
@@ -81,34 +81,31 @@ class Grafo(object):
                 grau += 1
         return grau
 
-    # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
-        # citar na documentacao: numeracao de vertices deve comecar a partir de 1
-        # Ordenação topológica baseada no grau de entrada dos vértices
-        ordem_topologica = []
+    # Ordenação topológica baseada no grau de entrada dos vértices.
+    #
+    ordem_topologica = []
 
-        # Calcula graus de entrada.
-        graus_entrada = [0 for _ in range(len(self.matriz))]
-        for i in range(len(self.matriz)):
-            listaVizinhos = self.retornaVizinhos(i)
-            for vizinho in listaVizinhos:
-                graus_entrada[vizinho-1] += 1
-        # Cria uma fila de vértices com grau de entrada zero.
-        fila = [v for v in range(len(self.matriz)) if graus_entrada[v] == 0]
-        while fila:
-            vertice = fila.pop()
-            ordem_topologica.append(vertice+1)
-            # Atualiza o grau de entrada dos vizinhos.
-            listaVizinhos = self.retornaVizinhos(vertice)
-            for vizinho in listaVizinhos:
-                graus_entrada[vizinho-1] -= 1
-                # Algum dos vizinhos passou a ter grau de entrada zero.
-                if graus_entrada[vizinho-1] == 0:
-                    fila.append(vizinho-1)
-        return ordem_topologica
+    # Calcula graus de entrada.
+    graus_entrada = [0 for _ in range(len(grafo))]
+    for vertice in self.matriz:
+        for vizinho in self.retornaVizinhos(vertice):
+            graus_entrada[vizinho] += 1
+    # Cria uma fila de vértices com grau de entrada zero.
+    fila = [v for v in range(len(self.matriz)) if graus_entrada[v] == 0]
+    while fila:
+        vertice = fila.pop()
+        ordem_topologica.append(vertice)
+        # Atualiza o grau de entrada dos vizinhos.
+        for vizinho in self.matriz[vertice]:
+            graus_entrada[vizinho] -= 1
+            # Algum dos vizinhos passou a ter grau de entrada zero.
+            if graus_entrada[vizinho] == 0:
+                fila.append(vizinho)
+    return ordem_topologica
 
 grafo = Grafo()
-nomeArquivo = "grafo_t.txt"
+nomeArquivo = "grafo.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
 n = int(arquivo.readline())
 grafo.inicializaMatriz(n)
@@ -117,5 +114,5 @@ for linha in arquivo:
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
-#print("Grafo possui ciclo?", grafo.verificaCiclo())
-print(grafo.ordenacao_topologica())
+print("Grafo possui ciclo?", grafo.verificaCiclo())
+#print(grafo.ordenacaoTopologica())

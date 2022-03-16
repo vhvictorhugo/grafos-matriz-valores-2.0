@@ -1,6 +1,3 @@
-from nbformat import read
-
-
 class Elemento(object):
     def __init__(self):
         self.vertice = 0
@@ -12,9 +9,9 @@ class Grafo(object):
         self.matriz = []
 
     def inicializaMatriz(self, n):  # inicializa a matriz de valores com 0
-        posicao = [0, 0]    # por default, uma posicao recebe peso (p) 0 e valor 0 para orientacao (o) de arco, sendo:
+        posicao = {"p":0, "o":0}    # por default, uma posicao recebe peso (p) 0 e valor 0 para orientacao (o) de arco, sendo:
         for i in range(n):          # 1: se o arco tem origem no vértice i, -1: se i é o vértice destino do arco e 0: se nao há arco para o vértice i
-            self.matriz.append([posicao].copy() * n)
+            self.matriz.append([posicao] * n)
 
     def mostraMatriz(self):
         for linha in self.matriz:
@@ -22,13 +19,13 @@ class Grafo(object):
 
     def atribuiPosicao(self, linha, coluna, peso):  # atribui os pesos e direções dos arcos na matriz
 
-        self.matriz[linha - 1][coluna - 1] = [peso, +1]
-        self.matriz[coluna - 1][linha - 1] = [peso,-1]
+        self.matriz[linha - 1][coluna - 1] = {"p":peso, "o":+1}
+        self.matriz[coluna - 1][linha - 1] = {"p":peso, "o":-1}
         
     def retornaVizinhos(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
         vizinhos = []
         for i in range(len(self.matriz)):
-            if (self.matriz[vertice][i][1] == 1):
+            if (self.matriz[vertice - 1][i][0] != 0) and (self.matriz[vertice-1][i][1] == 1):
                 vizinhos.append(i + 1)
         return vizinhos
 
@@ -73,39 +70,46 @@ class Grafo(object):
                     return self.verificacao(vertices, i, matriztemp)
         return False
 
-    def grauInterno(self, vertice):        
+    def grauInterno(self, vertice, matrizTemporaria):        
         grau = 0
         for i in range(len(self.matriz)):
-            valorOrientacao = self.matriz[vertice][i][1]
-            if(valorOrientacao == -1):  # codigo contendo uma matriz temporaria, a fim de recalcular o grau a cada alteracao no grafo
+            # if(self.matriz[vertice][i][1] == -1): # codigo original
+            if(matrizTemporaria[vertice][i].get("o") == -1):  # codigo contendo uma matriz temporaria, a fim de recalcular o grau a cada alteracao no grafo
                 grau += 1
         return grau
 
-    # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
-    def ordenacao_topologica(self):
-        # citar na documentacao: numeracao de vertices deve comecar a partir de 1
-        # Ordenação topológica baseada no grau de entrada dos vértices
-        ordem_topologica = []
+    def ordenacaoTopologica(self):
+        # verificaCiclo = self.verificaCiclo()
+        # if (verificaCiclo == True):
+        #     print("Grafo possui ciclo, nao e possivel efetuar a ordenacao topologica")
+        #     return
+        # else:
+        # matrizTemp = self.matriz.copy()
+        R = []
+        grausInternos = []
+        while(len(R) != len(self.matriz)):
+            # recupera os graus internos dos vertices
+            for i in range(len(self.matriz)):
+                grausInternos.append(self.grauInterno(i, self.matriz))
+                            
+            print("graus internos:", grausInternos)
 
-        # Calcula graus de entrada.
-        graus_entrada = [0 for _ in range(len(self.matriz))]
-        for i in range(len(self.matriz)):
-            listaVizinhos = self.retornaVizinhos(i)
-            for vizinho in listaVizinhos:
-                graus_entrada[vizinho-1] += 1
-        # Cria uma fila de vértices com grau de entrada zero.
-        fila = [v for v in range(len(self.matriz)) if graus_entrada[v] == 0]
-        while fila:
-            vertice = fila.pop()
-            ordem_topologica.append(vertice+1)
-            # Atualiza o grau de entrada dos vizinhos.
-            listaVizinhos = self.retornaVizinhos(vertice)
-            for vizinho in listaVizinhos:
-                graus_entrada[vizinho-1] -= 1
-                # Algum dos vizinhos passou a ter grau de entrada zero.
-                if graus_entrada[vizinho-1] == 0:
-                    fila.append(vizinho-1)
-        return ordem_topologica
+            grauZero = grausInternos.index(0)
+            print(grauZero)
+
+            R.append(grauZero+1)
+            print(R)
+
+            for i in range(len(self.matriz)):
+                print(self.matriz[grauZero][i])
+     
+                self.matriz[grauZero][i][1] = {"o":-1}
+
+            print("matriz alterada")
+            self.mostraMatriz()
+            
+            grausInternos.clear()
+        return R
 
 grafo = Grafo()
 nomeArquivo = "grafo_t.txt"
@@ -117,5 +121,5 @@ for linha in arquivo:
     grafo.atribuiPosicao((int(linha[0])), (int(linha[1])), (float(linha[2].replace('\n', ''))))
 arquivo.close()
 
-#print("Grafo possui ciclo?", grafo.verificaCiclo())
-print(grafo.ordenacao_topologica())
+# print("Grafo possui ciclo?", grafo.verificaCiclo())
+print(grafo.ordenacaoTopologica())

@@ -81,9 +81,7 @@ class Grafo(object):
                 grau += 1
         return grau
 
-    # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
-        # citar na documentacao: numeracao de vertices deve comecar a partir de 1
         # Ordenação topológica baseada no grau de entrada dos vértices
         ordem_topologica = []
 

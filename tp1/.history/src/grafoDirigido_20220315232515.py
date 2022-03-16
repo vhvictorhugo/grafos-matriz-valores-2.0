@@ -81,9 +81,7 @@ class Grafo(object):
                 grau += 1
         return grau
 
-    # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
-        # citar na documentacao: numeracao de vertices deve comecar a partir de 1
         # Ordenação topológica baseada no grau de entrada dos vértices
         ordem_topologica = []
 
@@ -92,19 +90,18 @@ class Grafo(object):
         for i in range(len(self.matriz)):
             listaVizinhos = self.retornaVizinhos(i)
             for vizinho in listaVizinhos:
-                graus_entrada[vizinho-1] += 1
+                graus_entrada[vizinho] += 1
         # Cria uma fila de vértices com grau de entrada zero.
         fila = [v for v in range(len(self.matriz)) if graus_entrada[v] == 0]
         while fila:
             vertice = fila.pop()
-            ordem_topologica.append(vertice+1)
+            ordem_topologica.append(vertice)
             # Atualiza o grau de entrada dos vizinhos.
-            listaVizinhos = self.retornaVizinhos(vertice)
-            for vizinho in listaVizinhos:
-                graus_entrada[vizinho-1] -= 1
+            for vizinho in self.matriz[vertice]:
+                graus_entrada[vizinho] -= 1
                 # Algum dos vizinhos passou a ter grau de entrada zero.
-                if graus_entrada[vizinho-1] == 0:
-                    fila.append(vizinho-1)
+                if graus_entrada[vizinho] == 0:
+                    fila.append(vizinho)
         return ordem_topologica
 
 grafo = Grafo()

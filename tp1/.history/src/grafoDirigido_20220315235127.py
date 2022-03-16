@@ -83,7 +83,6 @@ class Grafo(object):
 
     # FONTE: https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/ordenacao-topologica/
     def ordenacao_topologica(self):
-        # citar na documentacao: numeracao de vertices deve comecar a partir de 1
         # Ordenação topológica baseada no grau de entrada dos vértices
         ordem_topologica = []
 
@@ -92,7 +91,10 @@ class Grafo(object):
         for i in range(len(self.matriz)):
             listaVizinhos = self.retornaVizinhos(i)
             for vizinho in listaVizinhos:
+                print(listaVizinhos)
                 graus_entrada[vizinho-1] += 1
+        print(graus_entrada)
+        input("")
         # Cria uma fila de vértices com grau de entrada zero.
         fila = [v for v in range(len(self.matriz)) if graus_entrada[v] == 0]
         while fila:
@@ -108,7 +110,7 @@ class Grafo(object):
         return ordem_topologica
 
 grafo = Grafo()
-nomeArquivo = "grafo_t.txt"
+nomeArquivo = "grafo_t2.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
 n = int(arquivo.readline())
 grafo.inicializaMatriz(n)

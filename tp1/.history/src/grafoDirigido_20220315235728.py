@@ -108,7 +108,7 @@ class Grafo(object):
         return ordem_topologica
 
 grafo = Grafo()
-nomeArquivo = "grafo_t.txt"
+nomeArquivo = "grafo_t2.txt"
 arquivo = open(f'.\\src\\{nomeArquivo}', 'r')
 n = int(arquivo.readline())
 grafo.inicializaMatriz(n)
