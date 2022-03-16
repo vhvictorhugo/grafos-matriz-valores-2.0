@@ -513,6 +513,8 @@ class Grafo(object):
                     sat.append(i)
         return len(sat)
 
+    #Retorna o vertice com maior grau de saturação
+    #se empate considera o vértice xi de maior grau em V. 
     def calcularMaiorGrauSaturacao(self, sat, vertices):
         maior = -1
         
@@ -541,7 +543,7 @@ class Grafo(object):
 
         return m
             
-            
+    #seleciona a menor cor e colore o vertice
     def ColorirVertice(self, vertice, cores):
         vizinhos = self.retornaVizinhos(vertice)
         
@@ -557,43 +559,60 @@ class Grafo(object):
 
         
     def numeroCromatico(self):
-        vertices = []
+        V = []
         maior = -1
         cores = []      
         saturacao = []
        
+      
+
         for i in range(len(self.matriz)):
             if self.grauVertice(i+1) > maior:
+                #O vértice xi de maior grau é selecionado. Em caso de emparte, escolhe-se qualquer um.
                 maior = self.grauVertice(i+1)
                 x = i + 1
             saturacao.append([i+1, None])
-            vertices.append(i + 1)
-        
-        vertices.remove(x)
+            V.append(i + 1) # O conjunto V recebe todos os vértices de G
+
+        #remove o vértice xi de maior grau.
+        V.remove(x)
         saturacao[x-1][1] = None
+        #vertice xi é colorido com a primeira cor
         cores.append([x])
        
-        while len(vertices) > 0:
+        while len(V) > 0: # Enquanto houver vértice no conjunto V (conjunto de vértices não coloridos)
+
             vizinhos = self.retornaVizinhos(x)
             encontrou = False
+
+            # Calcula o grau de saturação de todos os vizinhos de xi com interseção em V
             for vertice in vizinhos:
-                if vertice in vertices:
+                if vertice in V:
                     s = self.calcularSaturacaoVertice(vertice, cores)
                     saturacao[vertice-1][1] = s
                     encontrou = True
+
+            #caso não os vertices restantes não tenham grau de saturação,
+            # o vértice xi de maior grau em V é selecionado, colorido e removido do conjunto V
+
             if (not encontrou):
                 maior = -1
-                for i in vertices:
+                for i in V:
                     if self.grauVertice(i) > maior:
                         maior = self.grauVertice(i)
                         x = i 
                 self.ColorirVertice(x, cores)
-                vertices.remove(x)
+                V.remove(x)
+
+            # O vértice xi de maior grau de saturação é selecionado. Note que
+            # todos os vértices de V são comparados, mesmo os que não são vizinhos de xi
             else:  
-                x = self.calcularMaiorGrauSaturacao(deepcopy(saturacao), deepcopy(vertices))
+                x = self.calcularMaiorGrauSaturacao(deepcopy(saturacao), deepcopy(V))
                 saturacao[x-1][1] = None
+                #O vértice xi é colorido com a menor cor  disponível para ele
                 self.ColorirVertice(x, cores)
-                vertices.remove(x)
+                #O vértice xi que acabou de ser colorido sai do conjunto V
+                V.remove(x)
 
         return len(cores)
 
