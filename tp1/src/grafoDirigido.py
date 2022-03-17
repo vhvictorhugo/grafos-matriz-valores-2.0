@@ -23,13 +23,6 @@ class GrafoDirigido(object):
                 vizinhos.append(i+1)
         return vizinhos
 
-    def retornaVizinhos2(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
-        vizinhos = []
-        for i in range(len(self.matriz)):
-            if (self.matriz[vertice][i][1] == 1):
-                vizinhos.append(i)
-        return vizinhos
-
     def listarVertices(self):
         vertices = []
         for i in range(len(self.matriz)):

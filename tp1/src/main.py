@@ -118,7 +118,7 @@ def menuFuncoes():
             grafoNaoDirigido.verificarEuliriano()       
 
         elif escolha == 13:
-            print("Conjunto de independencia:", grafoNaoDirigido.heuristicaGulosa()[1])
+            print("Conjunto independente:", grafoNaoDirigido.heuristicaGulosa()[1])
         
         elif escolha == 14:
             print("Numero cromatico do grafo é :", grafoNaoDirigido.numeroCromatico())
@@ -173,9 +173,9 @@ grafoOrientado = None
 while True:
     printMenu()
     print("1) Escolher o arquivo")
-    print("2) Usar as funcoes do grafo (grafo não dirigido)")
-    print("3) Usar grafo dirigido")
-    print("4) Converter o grafo para Json")
+    print("2) Biblioteca (Grafos Não Direcionados)")
+    print("3) Verificar se Grafo Direcionado é Acíclico")
+    print("4) Converter o grafo para Json(Grafo Não Direcionado)")
     print("0) Sair")
     escolha = int(input("->"))
     if escolha == 1:
