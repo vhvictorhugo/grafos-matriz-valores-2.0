@@ -324,7 +324,7 @@ class Grafo(object):
         print("Cadeia euliriana no grafo: ", cadeia)
 
     def escreverJson(self):
-        with open(".\\src\\base.json", encoding='utf-8') as meu_json:
+        with open("base.json", encoding='utf-8') as meu_json:
             j = json.load(meu_json)
         
     
@@ -370,15 +370,16 @@ class Grafo(object):
 
     def lerJson(self, nomeArquivo):
         try:
-            with open(f".\\src\\{nomeArquivo}", encoding='utf-8') as meu_json:
+
+            with open(f"arquivos\\{nomeArquivo}", encoding='utf-8') as meu_json:
                 dados = json.load(meu_json)
         except:
-            print("arquivo nao encontrado, verifique se esta na pasta src")
+            print("arquivo nao encontrado, verifique se esta na pasta arquivos")
             
 
         nomeArquivo = nomeArquivo.replace("json","txt")
         try:
-            arquivo = open(f".\\src\\{nomeArquivo}", "w+")
+            arquivo = open(f"arquivos\\{nomeArquivo}", "w+")
         except:
             print("Erro ao abrir o arquivo")
 
@@ -579,10 +580,13 @@ class Grafo(object):
                 if vertice in V:
                     s = self.calcularSaturacaoVertice(vertice, cores)
                     saturacao[vertice-1][1] = s
-                    encontrou = True
+                
 
             #caso não os vertices restantes não tenham grau de saturação,
             # o vértice xi de maior grau em V é selecionado, colorido e removido do conjunto V
+            for v in saturacao:
+                if v[1] != None:
+                    encontrou = True
 
             if (not encontrou):
                 maior = -1
