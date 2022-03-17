@@ -5,29 +5,22 @@ class GrafoDirigido(object):
     def inicializaMatriz(self, n):  # inicializa a matriz de valores com 0
         posicao = [0, 0]    # por default, uma posicao recebe peso (p) 0 e valor 0 para orientacao (o) de arco, sendo:
         for i in range(n):          # 1: se o arco tem origem no vértice i, -1: se i é o vértice destino do arco e 0: se nao há arco para o vértice i
-            self.matriz.append([posicao].copy() * n)
-
-    def mostraMatriz(self):
-        for linha in self.matriz:
-            print(linha,"\n")
+            self.matriz.append([posicao].copy() * n)    
 
     def atribuiPosicao(self, linha, coluna, peso):  # atribui os pesos e direções dos arcos na matriz
 
         self.matriz[linha - 1][coluna - 1] = [peso, +1]
         self.matriz[coluna - 1][linha - 1] = [peso,-1]
+
+    def mostraMatriz(self):
+        for linha in self.matriz:
+            print(linha,"\n")
         
     def retornaVizinhos(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
         vizinhos = []
         for i in range(len(self.matriz)):
             if (self.matriz[vertice][i][1] == 1):
                 vizinhos.append(i+1)
-        return vizinhos
-
-    def retornaVizinhos2(self, vertice): # percorre a coluna correspondente ao vértice e verifica os vizinhos
-        vizinhos = []
-        for i in range(len(self.matriz)):
-            if (self.matriz[vertice][i][1] == 1):
-                vizinhos.append(i)
         return vizinhos
 
     def listarVertices(self):
